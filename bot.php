@@ -48,7 +48,7 @@ function tmr($tmr){
       endwhile;
   }
 
-$cookie=readline(col('Input Cookie :","h"));
+$cookie=readline(col('Input Cookie :',"h"));
 echo$n;
 $user_agent=readline(col('Input UserAgent :',"h"));
 
