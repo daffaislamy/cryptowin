@@ -92,7 +92,7 @@ while(true){
 			$sukses=str_replace("</b>","",str_replace("<b>","",$suk));
 			echo col($sukses,'k').$n;
 			$r5=Run('https://cryptowin.io/account',$ua);
-			$bal=explode('</h2>',explode('<i class="fa fa-btc" style="font-size:30px;" aria-hidden="true"></i>',$r1)[1])[0];
+			$bal=explode('</h2>',explode('<i class="fa fa-btc" style="font-size:30px;" aria-hidden="true"></i>',$r5)[1])[0];
 			echo col("New Balance",'h').col(' ~> ','m').col($bal,"p").$n;
 			echo str_repeat("~",66);
 			echo$n;
