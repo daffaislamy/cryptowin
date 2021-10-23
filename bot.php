@@ -30,8 +30,6 @@ function Run($url, $ua, $data = null) {
         curl_close($ch);
         if ($run) {
             return $run;
-        } else {
-            continue;
         }
     }
 }
