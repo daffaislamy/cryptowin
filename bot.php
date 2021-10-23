@@ -31,8 +31,6 @@ function Run($url, $ua, $data = null) {
         if ($run) {
             return $run;
         } else {
-            echo col("Check your connection!","rr")."\n";
-            sleep(2);
             continue;
         }
     }
