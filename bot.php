@@ -68,17 +68,10 @@ if($user){
 
 while(true){
 	$r2=Run('https://cryptowin.io/faucet',$ua);
-	$cap=explode('"',explode('class="form-group"><img src="',$r2)[1])[0];
-	if($cap){
-		$csrf=explode('">',explode('name="csrfToken" value="',$r2)[1])[0];
-		$r3=Run('https://cryptowin.io'.$cap,$ua);
-		$file=fopen("faucet.png","w");
-		fwrite($file,$r3);
-		fclose($file);
+	$hkey=explode('">',explode('<div class="h-captcha" data-sitekey="',$r2)[1])[0];//ef7cabfd-741e-4643-855f-77308adedef5
+	if($hkey){
 		
-		shell_exec("termux-open faucet.png");
-		
-		$captcha=readline(col("Input Captcha ","m").col("~> ","p"));
+		$captcha=Hcaptcha();
 		$data = "csrfToken=".$csrf."&captcha=".$captcha."&claim=";
 		$r4=Run('https://cryptowin.io/faucet',$ua,$data);
 		$tmr=explode(' * 1000)',explode('+ (',$r4)[1])[0];
