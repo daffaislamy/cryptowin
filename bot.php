@@ -43,13 +43,14 @@ function tmr($tmr){
       sleep(1); 
       endwhile;
   }
-function Hcaptcha($sitekey,$apikey){
+function Hcaptcha($siteurl,$sitekey,$apikey){
 	$ua=array();
 	$ua[]="Host: api.anycaptcha.com";
 	$ua[]="Content-Type: application/json";
 	
-	$data=json_encode(array("clientKey"=>$apikey,"task"=>array("type"=>"HCaptchaTaskProxyless","websiteURL"=>"https://hcaptcha.com/","websiteKey"=>$sitekey)));
+	$data=json_encode(array("clientKey"=>$apikey,"task"=>array("type"=>"HCaptchaTaskProxyless","websiteURL"=>$siteurl,"websiteKey"=>$sitekey)));
 	$Create=json_decode(Run('https://api.anycaptcha.com/createTask',$ua,$data));
+	
 	if($Create->errorId == '1'){
 		return 0;
 	}else{
@@ -83,24 +84,29 @@ c();
 echo col("Script by ","h")."iewil".$n2;
 
 $r1=Run('https://cryptowin.io/account',$ua);
-$user=explode('</b>!',explode('Hello <b>',$r1)[1])[0];
+
+$user=explode('</b>',explode('Welcome <b>',$r1)[1])[0];
+
 if($user){
 	echo col("Username",'h').col(' ~> ','m').col($user,"p").$n;
 	$bal=explode('</h2>',explode('<i class="fa fa-btc" style="font-size:30px;" aria-hidden="true"></i>',$r1)[1])[0];
 	echo col("Balance",'h').col(' ~> ','m').col($bal,"p").$n2;
 	}else{
 		echo col("Failed Login","m").$n;
+		unlink('cookie.txt');
 		exit;
 		}
 
 while(true){
 	$r2=Run('https://cryptowin.io/faucet',$ua);
+	$csrf=explode('">',explode('<input type="hidden" name="csrfToken" value="',$r2)[1])[0];//c87fb98c9bc23ee2e8e08d24727aca87">
 	$hkey=explode('">',explode('<div class="h-captcha" data-sitekey="',$r2)[1])[0];//ef7cabfd-741e-4643-855f-77308adedef5
-	if($hkey){
+	$tmr=explode(' * 1000)',explode('+ (',$r2)[1])[0];
+	if($tmr){tmr($tmr);}else{
 		
-		$captcha=Hcaptcha($hkey,$apikey);
+		$captcha=Hcaptcha('https://cryptowin.io/faucet',$hkey,$apikey);
 		
-		$data = "csrfToken=".$csrf."&captcha=".$captcha."&claim=";
+		$data = "csrfToken=".$csrf."&g-recaptcha-response=".$captcha."&h-captcha-response=".$captcha."&claim=";
 		$r4=Run('https://cryptowin.io/faucet',$ua,$data);
 		$tmr=explode(' * 1000)',explode('+ (',$r4)[1])[0];
 		$notif=explode("',",explode("sendNotify('",$r4)[1])[0];
@@ -119,9 +125,6 @@ while(true){
 				$danger=str_replace("</b>","",str_replace("<b>","",$dang));
 				echo col($danger,"rr").$n;
 				}
-		}else{
-			$tmr=explode(' * 1000)',explode('+ (',$r2)[1])[0];
-			tmr($tmr);
-			}
+		}
 	}
 
