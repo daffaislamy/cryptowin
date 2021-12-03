@@ -43,10 +43,37 @@ function tmr($tmr){
       sleep(1); 
       endwhile;
   }
+function Hcaptcha($sitekey,$apikey){
+	$ua=array();
+	$ua[]="Host: api.anycaptcha.com";
+	$ua[]="Content-Type: application/json";
+	
+	$data=json_encode(array("clientKey"=>$apikey,"task"=>array("type"=>"HCaptchaTaskProxyless","websiteURL"=>"https://hcaptcha.com/","websiteKey"=>$sitekey)));
+	$Create=json_decode(Run('https://api.anycaptcha.com/createTask',$ua,$data));
+	if($Create->errorId == '1'){
+		return 0;
+	}else{
+		$Task=$Create->taskId;
+		while(true){
+			$base=json_encode(array("clientKey"=>$apikey,"taskId"=>$Task));
+			$Result=json_decode(Run('https://api.anycaptcha.com/getTaskResult',$ua,$base));
+			if($Result->status=='ready'){
+				return $Result->solution->gRecaptchaResponse;
+			}elseif($Result->status=='processing'){
+				sleep(3);
+			}else{
+				return 0;
+				break;
+			}
+		}
+	}
+}
 
 $cookie=readline(col('Input Cookie :',"h"));
 echo$n;
 $user_agent=readline(col('Input UserAgent :',"h"));
+echo$n;
+$apikey=readline(col('Input Apikey (anycaptcha) :',"h"));
 
 $ua=array(
 	"user-agent: ".$user_agent,
@@ -71,7 +98,8 @@ while(true){
 	$hkey=explode('">',explode('<div class="h-captcha" data-sitekey="',$r2)[1])[0];//ef7cabfd-741e-4643-855f-77308adedef5
 	if($hkey){
 		
-		$captcha=Hcaptcha();
+		$captcha=Hcaptcha($hkey,$apikey);
+		
 		$data = "csrfToken=".$csrf."&captcha=".$captcha."&claim=";
 		$r4=Run('https://cryptowin.io/faucet',$ua,$data);
 		$tmr=explode(' * 1000)',explode('+ (',$r4)[1])[0];
