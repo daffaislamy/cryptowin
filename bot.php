@@ -1,6 +1,7 @@
 <?
 //error
 error_reporting(0);
+system('rm cookie.txt');
 //timezone
 date_default_timezone_set('UTC');
 //warna
@@ -86,9 +87,14 @@ echo col("Script by ","h")."iewil".$n2;
 $r1=Run('https://cryptowin.io/account',$ua);
 
 $user=explode('</b>',explode('Welcome <b>',$r1)[1])[0];
-echo col("Username",'h').col(' ~> ','m').col($user,"p").$n;
-$bal=explode('</h2>',explode('<i class="fa fa-btc" style="font-size:30px;" aria-hidden="true"></i>',$r1)[1])[0];
-echo col("Balance",'h').col(' ~> ','m').col($bal,"p").$n2;
+
+//if($user){
+	echo col("Username",'h').col(' ~> ','m').col($user,"p").$n;
+	$bal=explode('</h2>',explode('<i class="fa fa-btc" style="font-size:30px;" aria-hidden="true"></i>',$r1)[1])[0];
+	echo col("Balance",'h').col(' ~> ','m').col($bal,"p").$n2;
+	//}else{
+		//echo col("Failed Login","m").$n;exit;
+		//}
 
 while(true){
 	$r2=Run('https://cryptowin.io/faucet',$ua);
@@ -116,6 +122,7 @@ while(true){
 			}elseif($notif=="danger"){
 				$dang=explode("');",explode("sendNotify('danger', '",$r4)[1])[0];
 				$danger=str_replace("</b>","",str_replace("<b>","",$dang));
+				if($danger=="You reached the maximum daily claims, get back tomorrow for more earnings."){echo $danger."\n";exit;}
 				echo col($danger,"rr").$n;
 				}
 		}
