@@ -305,7 +305,12 @@ $misi=explode('<tr>',$r1);
 for($x=2;$x<count($misi);$x++){
 	$y=$x-1;$var=24;$len=" ";
 	$ms=explode('</td>',explode('<td>',$misi[$x])[1])[0];
-	$mg=strlen($ms);$varmg=$var-$mg;$spc=str_repeat($len,$varmg);
+	$mg=strlen($ms);
+if($mg>24){
+		$ms = substr($ms,0,22);
+		$mg=strlen($ms);
+	}
+$varmg=$var-$mg;$spc=str_repeat($len,$varmg);
 	$ex=explode('</div>',explode('aria-valuemax="100">',$misi[$x])[1])[0];
 	echo Cl($y." > ","m").Cl($ms,"h").$spc."~> ".Cl($ex,"k")."\n";
 }
