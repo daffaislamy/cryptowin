@@ -272,8 +272,8 @@ while(true){
 			}
 		}
 	}else{
-		echo Cl("Faucet habis\n","m");Li();
-		goto menu;
+		sleep(5);
+		goto faucet;
 	}
 }
 
