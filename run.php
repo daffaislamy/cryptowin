@@ -28,7 +28,7 @@ function Gmed($ca,$ref){$url="https://api-secure.solvemedia.com/papi/media?c=".$
 function Build($a){return http_build_query($a);}
 
 function head(){$user=Sv("User_Agent");$cookie=Sv("Cookie");return ["user-agent: ".$user,"cookie: ".$cookie];}
-function host(){return "https://cryptowin.xyz";}
+function host(){return "https://hostratgeber.de";}
 function gptc(){$url = host()."/ptc";return R($url,head());}
 function gview($id){$url = host()."/ptc/view/".$id;return R($url,head());}
 function pview($id,$csrf,$token,$cap,$ca){$url = host()."/ptc/verify/".$id;$data = ["captcha"=>"solvemedia","adcopy_response"=>$cap,"adcopy_challenge"=>$ca,"g-recaptcha-response"=>"","h-captcha-response"=>"","csrf_token_name"=>$csrf,"token"=>$token];return R($url,head(),build($data));}
